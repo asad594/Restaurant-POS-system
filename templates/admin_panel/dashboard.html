@@ -1,0 +1,314 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard - Food Heaven{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Stats Grid -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon-wrapper menu-icon">
+            <i class="fa-solid fa-hamburger"></i>
+        </div>
+        <div class="stat-details">
+            <span class="stat-label">Total Menu Items</span>
+            <span class="stat-value" id="stat-menu-items">0</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon-wrapper category-icon">
+            <i class="fa-solid fa-list"></i>
+        </div>
+        <div class="stat-details">
+            <span class="stat-label">Total Categories</span>
+            <span class="stat-value" id="stat-categories">0</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon-wrapper orders-icon">
+            <i class="fa-solid fa-receipt"></i>
+        </div>
+        <div class="stat-details">
+            <span class="stat-label">Total Orders Today</span>
+            <span class="stat-value" id="stat-orders-today">0</span>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon-wrapper revenue-icon">
+            <i class="fa-solid fa-indian-rupee-sign"></i>
+        </div>
+        <div class="stat-details">
+            <span class="stat-label">Total Revenue Today</span>
+            <span class="stat-value" id="stat-revenue-today">Rs. 0.00</span>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions & Recent Orders Row -->
+<div class="dashboard-row">
+    <!-- Recent Orders Table -->
+    <div class="dashboard-col-left">
+        <div class="content-card">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Recent Orders</h3>
+                <a href="/admin-panel/orders/" class="view-all-link">View All Orders</a>
+            </div>
+            <div class="table-responsive">
+                <table class="data-table" id="recent-orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Table</th>
+                            <th>Items Count</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recent-orders-body">
+                        <!-- Loaded dynamically via JS -->
+                        <tr>
+                            <td colspan="6" class="table-loading">Loading recent orders...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions Panel -->
+    <div class="dashboard-col-right">
+        <div class="content-card">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa-solid fa-bolt"></i> Quick Actions</h3>
+            </div>
+            <div class="quick-actions-list">
+                <a href="/admin-panel/categories/?add=true" class="quick-action-btn btn-green-outline">
+                    <i class="fa-solid fa-circle-plus"></i>
+                    <span>Add New Category</span>
+                </a>
+                <a href="/admin-panel/menu-items/?add=true" class="quick-action-btn btn-blue-outline">
+                    <i class="fa-solid fa-hamburger"></i>
+                    <span>Add New Menu Item</span>
+                </a>
+                <a href="/" class="quick-action-btn btn-purple-outline">
+                    <i class="fa-solid fa-cash-register"></i>
+                    <span>Open POS Terminal</span>
+                </a>
+                <button class="quick-action-btn btn-green-outline" id="btn-quick-add-admin" style="background: none; width: 100%; text-align: left; cursor: pointer; display: flex; align-items: center;">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <span style="font-family: var(--font-family); font-weight: 600;">Add New Admin</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Admin User Modal -->
+<div class="modal-overlay" id="admin-user-modal">
+    <div class="modal-container modal-sm">
+        <div class="modal-header">
+            <h3 class="modal-title">Add New Admin User</h3>
+            <button class="modal-close-btn" id="admin-user-modal-close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <form id="admin-user-form" class="modal-form">
+            <div class="form-group">
+                <label for="admin-username">Username <span class="required">*</span></label>
+                <input type="text" id="admin-username" name="username" placeholder="e.g. manager1" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="admin-email">Email Address</label>
+                <input type="email" id="admin-email" name="email" placeholder="e.g. manager@restaurant.pos">
+            </div>
+            
+            <div class="form-group">
+                <label for="admin-password">Password <span class="required">*</span></label>
+                <input type="password" id="admin-password" name="password" placeholder="Min 6 characters" required>
+            </div>
+
+            <div class="form-group-row">
+                <label for="admin-superuser" class="label-toggle-switch">Full Superuser Access</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="admin-superuser" name="is_superuser">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="admin-user-modal-cancel">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Admin</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- End of Day Card & Button -->
+<div class="content-card" style="margin-top: 25px; padding: 20px;">
+    <button id="btn-close-day" style="background-color: #e17055; color: #ffffff; width: 100%; padding: 15px; font-size: 18px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: background-color 0.2s ease;">
+        🔴 Close Day & Save Revenue
+    </button>
+    
+    <!-- EOD Summary Card -->
+    <div id="eod-summary-card" class="stat-card" style="display: none; margin-top: 20px; background-color: #1a1a2e; border: 1px solid var(--border-color); flex-direction: column; align-items: stretch; gap: 15px; padding: 20px; border-radius: 8px;">
+        <h4 style="color: var(--color-green); font-size: 16px; font-weight: 600; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 10px;">
+            <i class="fa-solid fa-square-poll-vertical"></i> EOD Summary Report
+        </h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px;">
+            <div>
+                <span style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Today's Date</span>
+                <span id="eod-date" style="font-size: 15px; font-weight: 600; color: var(--text-main);">-</span>
+            </div>
+            <div>
+                <span style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Total Orders</span>
+                <span id="eod-orders" style="font-size: 15px; font-weight: 600; color: var(--text-main);">-</span>
+            </div>
+            <div>
+                <span style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Total Revenue</span>
+                <span id="eod-revenue" style="font-size: 15px; font-weight: 700; color: var(--color-green);">-</span>
+            </div>
+            <div>
+                <span style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Cash Revenue</span>
+                <span id="eod-cash" style="font-size: 15px; font-weight: 600; color: var(--color-yellow);">-</span>
+            </div>
+            <div>
+                <span style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Card Revenue</span>
+                <span id="eod-card" style="font-size: 15px; font-weight: 600; color: var(--color-blue);">-</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End of Day Confirmation Modal -->
+<div class="modal-overlay" id="confirm-eod-modal">
+    <div class="modal-container modal-sm">
+        <div class="modal-header">
+            <h3 class="modal-title" id="confirm-eod-title">Close Today</h3>
+            <button class="modal-close-btn" id="confirm-eod-modal-close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div style="padding: 20px; text-align: center;">
+            <p id="confirm-eod-text" style="font-size: 16px; color: var(--text-main); margin-bottom: 25px;">
+                Are you sure you want to close today and save revenue?
+            </p>
+            <div class="modal-footer" style="justify-content: center; gap: 15px; border-top: none; padding-top: 0;">
+                <button type="button" class="btn btn-secondary" id="confirm-eod-cancel" style="background-color: var(--color-gray); color: white;">Cancel</button>
+                <button type="button" class="btn" id="confirm-eod-yes" style="background-color: #e17055; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-family: var(--font-family);">Yes, Close Day</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        initDashboardPage();
+        initEndOfDayFeature();
+    });
+
+    function initEndOfDayFeature() {
+        const btnCloseDay = document.getElementById('btn-close-day');
+        const modal = document.getElementById('confirm-eod-modal');
+        const btnCloseModal = document.getElementById('confirm-eod-modal-close');
+        const btnCancel = document.getElementById('confirm-eod-cancel');
+        const btnConfirm = document.getElementById('confirm-eod-yes');
+        const summaryCard = document.getElementById('eod-summary-card');
+
+        let nextCloseDayData = null;
+
+        function updateNextCloseDay() {
+            fetch('/api/dashboard/stats/')
+                .then(res => res.json())
+                .then(stats => {
+                    nextCloseDayData = {
+                        date: stats.next_close_day,
+                        formatted: stats.next_close_day_formatted,
+                        is_today: stats.next_close_day_is_today
+                    };
+                    if (btnCloseDay && nextCloseDayData) {
+                        if (!nextCloseDayData.is_today) {
+                            btnCloseDay.innerHTML = `🔴 Close Day (${nextCloseDayData.formatted}) & Save Revenue`;
+                        } else {
+                            btnCloseDay.innerHTML = `🔴 Close Day & Save Revenue`;
+                        }
+                    }
+                })
+                .catch(err => console.error('Error fetching close day stats:', err));
+        }
+
+        updateNextCloseDay();
+
+        if (btnCloseDay && modal) {
+            btnCloseDay.addEventListener('click', () => {
+                const titleEl = document.getElementById('confirm-eod-title');
+                const textEl = document.getElementById('confirm-eod-text');
+                if (nextCloseDayData) {
+                    if (titleEl) {
+                        titleEl.textContent = `Close Day: ${nextCloseDayData.formatted}`;
+                    }
+                    if (textEl) {
+                        textEl.textContent = `Are you sure you want to close the day of ${nextCloseDayData.formatted} and save revenue?`;
+                    }
+                }
+                openModal('confirm-eod-modal');
+            });
+        }
+
+        if (btnCloseModal) {
+            btnCloseModal.addEventListener('click', () => closeModal('confirm-eod-modal'));
+        }
+        if (btnCancel) {
+            btnCancel.addEventListener('click', () => closeModal('confirm-eod-modal'));
+        }
+
+        if (btnConfirm) {
+            btnConfirm.addEventListener('click', () => {
+                closeModal('confirm-eod-modal');
+                showSpinner();
+
+                fetch('/api/dashboard/end-of-day/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken()
+                    }
+                })
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    showToast('✅ Day closed! Revenue saved successfully', 'success');
+                    
+                    // Show summary card and fill data
+                    document.getElementById('eod-date').textContent = data.date;
+                    document.getElementById('eod-orders').textContent = data.total_orders;
+                    document.getElementById('eod-revenue').textContent = `Rs. ${parseFloat(data.total_revenue).toFixed(2)}`;
+                    document.getElementById('eod-cash').textContent = `Rs. ${parseFloat(data.cash_revenue).toFixed(2)}`;
+                    document.getElementById('eod-card').textContent = `Rs. ${parseFloat(data.card_revenue).toFixed(2)}`;
+                    
+                    summaryCard.style.display = 'flex';
+                    
+                    // Update next close day info
+                    updateNextCloseDay();
+                })
+                .catch(err => {
+                    console.error('Error closing day:', err);
+                    showToast('Failed to close day and save revenue', 'danger');
+                })
+                .finally(() => {
+                    hideSpinner();
+                });
+            });
+        }
+    }
+</script>
+{% endblock %}
+

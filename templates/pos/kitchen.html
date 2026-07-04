@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Kitchen Monitor - Restaurant POS{% endblock %}
+
+{% block content %}
+<div id="kitchen-display-page" class="kitchen-screen">
+    <header class="kitchen-header">
+        <h1 class="menu-title"><i class="fa-solid fa-fire-burner"></i> Kitchen Monitor</h1>
+        <div class="system-time" style="font-size: 1.1rem; color: var(--accent-color);">
+            <i class="fa-solid fa-circle-notch fa-spin"></i> Auto-Refreshing (10s)
+        </div>
+    </header>
+
+    <!-- Orders Cards Grid -->
+    <div class="kitchen-grid" id="kitchen-grid">
+        <!-- Loaded via JS -->
+        <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 4rem;">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 2.5rem; margin-bottom: 1rem; display: block;"></i>
+            Loading active kitchen orders...
+        </div>
+    </div>
+</div>
+{% endblock %}

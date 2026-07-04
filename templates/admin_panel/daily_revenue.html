@@ -1,0 +1,142 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Daily Revenue Report - Food Heaven{% endblock %}
+{% block page_title %}📊 Daily Revenue Report{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Custom Styling for Daily Revenue Page */
+    .daily-revenue-table tbody tr {
+        opacity: 0;
+        animation: fadeInRow 0.4s ease forwards;
+    }
+    
+    .daily-revenue-table tbody tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.02);
+    }
+    
+    .daily-revenue-table tbody tr:nth-child(odd) {
+        background-color: transparent;
+    }
+    
+    .daily-revenue-table tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+        transition: background-color 0.2s ease;
+    }
+    
+    .total-revenue-cell {
+        color: #00b894 !important;
+        font-weight: 700;
+    }
+    
+    @keyframes fadeInRow {
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--text-muted);
+    }
+    
+    .empty-state i {
+        font-size: 48px;
+        margin-bottom: 15px;
+        color: var(--border-color);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Summary Cards Row -->
+<div class="stats-grid" style="margin-bottom: 25px;">
+    <!-- Total Days Recorded -->
+    <div class="stat-card">
+        <div class="stat-icon-wrapper menu-icon" style="background-color: rgba(116, 185, 255, 0.15); color: #74b9ff;">
+            <i class="fa-solid fa-calendar-days"></i>
+        </div>
+        <div class="stat-details">
+            <span class="stat-label">Total Days Recorded</span>
+            <span class="stat-value">{{ total_days }}</span>
+        </div>
+    </div>
+    
+    <!-- All-Time Total Revenue -->
+    <div class="stat-card">
+        <div class="stat-icon-wrapper revenue-icon" style="background-color: rgba(0, 184, 148, 0.15); color: #00b894;">
+            <i class="fa-solid fa-sack-dollar"></i>
+        </div>
+        <div class="stat-details">
+            <span class="stat-label">All-Time Total Revenue</span>
+            <span class="stat-value">Rs. {{ all_time_revenue|floatformat:2 }}</span>
+        </div>
+    </div>
+    
+    <!-- Best Day Revenue -->
+    <div class="stat-card">
+        <div class="stat-icon-wrapper category-icon" style="background-color: rgba(253, 203, 110, 0.15); color: #fdcb6e;">
+            <i class="fa-solid fa-crown"></i>
+        </div>
+        <div class="stat-details">
+            <span class="stat-label">Best Day Revenue</span>
+            <span class="stat-value">Rs. {{ best_day_revenue|floatformat:2 }}</span>
+        </div>
+    </div>
+    
+    <!-- Average Daily Revenue -->
+    <div class="stat-card">
+        <div class="stat-icon-wrapper orders-icon" style="background-color: rgba(165, 94, 234, 0.15); color: #a55eea;">
+            <i class="fa-solid fa-calculator"></i>
+        </div>
+        <div class="stat-details">
+            <span class="stat-label">Average Daily Revenue</span>
+            <span class="stat-value">Rs. {{ avg_daily_revenue|floatformat:2 }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- Daily Revenue Table Card -->
+<div class="content-card">
+    <div class="table-responsive">
+        <table class="data-table daily-revenue-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Total Orders</th>
+                    <th>Cash Revenue (PKR)</th>
+                    <th>Card Revenue (PKR)</th>
+                    <th>Total Revenue (PKR)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr style="animation-delay: {% widthratio forloop.counter0 1 50 %}ms;">
+                    <td style="font-weight: 500;">{{ record.date|date:"l, F j Y" }}</td>
+                    <td>{{ record.total_orders }}</td>
+                    <td>Rs. {{ record.cash_revenue|floatformat:2 }}</td>
+                    <td>Rs. {{ record.card_revenue|floatformat:2 }}</td>
+                    <td class="total-revenue-cell">Rs. {{ record.total_revenue|floatformat:2 }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">
+                        <div class="empty-state">
+                            <i class="fa-solid fa-folder-open"></i>
+                            <p>No daily revenue records yet. Close your first day from the Dashboard!</p>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Manage Orders - Food Heaven{% endblock %}
+{% block page_title %}Orders{% endblock %}
+
+{% block content %}
+<div class="content-header-row">
+    <!-- Status Filter Buttons -->
+    <div class="orders-filter-bar">
+        <button class="filter-btn active" data-status="all">All</button>
+        <button class="filter-btn" data-status="pending">Pending</button>
+        <button class="filter-btn" data-status="preparing">Preparing</button>
+        <button class="filter-btn" data-status="ready">Ready</button>
+        <button class="filter-btn" data-status="served">Served</button>
+    </div>
+    
+    <div class="refresh-indicator">
+        <i class="fa-solid fa-arrows-rotate"></i>
+        <span>Auto-refreshing in <span id="refresh-countdown">30</span>s</span>
+    </div>
+</div>
+
+<!-- Orders Table -->
+<div class="content-card">
+    <div class="table-responsive">
+        <table class="data-table orders-data-table" id="orders-table">
+            <thead>
+                <tr>
+                    <th></th> <!-- Accordion icon expand column -->
+                    <th>Order ID</th>
+                    <th>Table</th>
+                    <th>Items Count</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Time Placed</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="orders-table-body">
+                <!-- Loaded dynamically via JS -->
+                <tr>
+                    <td colspan="8" class="table-loading">Loading orders...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        initOrdersPage();
+    });
+</script>
+{% endblock %}

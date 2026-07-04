@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Food Heaven Admin Panel{% endblock %}</title>
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="{% static 'admin_panel/css/style.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="dark-theme">
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="loading-overlay" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- App Layout Container -->
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="admin-sidebar">
+            <div class="sidebar-brand">
+                <i class="fa-solid fa-utensils"></i>
+                <span>Food Heaven <span>POS</span></span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/admin-panel/" class="nav-link {% if request.resolver_match.url_name == 'admin-panel-dashboard' %}active{% endif %}">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/admin-panel/categories/" class="nav-link {% if request.resolver_match.url_name == 'admin-panel-categories' %}active{% endif %}">
+                    <i class="fa-solid fa-list"></i>
+                    <span>Categories</span>
+                </a>
+                <a href="/admin-panel/menu-items/" class="nav-link {% if request.resolver_match.url_name == 'admin-panel-menu-items' %}active{% endif %}">
+                    <i class="fa-solid fa-hamburger"></i>
+                    <span>Menu Items</span>
+                </a>
+                <a href="/admin-panel/orders/" class="nav-link {% if request.resolver_match.url_name == 'admin-panel-orders' %}active{% endif %}">
+                    <i class="fa-solid fa-receipt"></i>
+                    <span>Orders</span>
+                </a>
+                <a href="/admin-panel/tables/" class="nav-link {% if request.resolver_match.url_name == 'admin-panel-tables' %}active{% endif %}">
+                    <i class="fa-solid fa-chair"></i>
+                    <span>Tables</span>
+                </a>
+                <a href="/admin-panel/payments/" class="nav-link {% if request.resolver_match.url_name == 'admin-panel-payments' %}active{% endif %}">
+                    <i class="fa-solid fa-credit-card"></i>
+                    <span>Payments</span>
+                </a>
+                <a href="/admin-panel/daily-revenue/" class="nav-link {% if request.resolver_match.url_name == 'admin_daily_revenue' %}active{% endif %}">
+                    <i style="font-style: normal;">📊</i>
+                    <span>Daily Revenue</span>
+                </a>
+            </nav>
+            <div class="sidebar-toggle" id="sidebar-collapse-btn">
+                <i class="fa-solid fa-chevron-left"></i>
+            </div>
+        </aside>
+
+        <!-- Main Content Wrapper -->
+        <div class="main-wrapper">
+            <!-- Top Navigation Bar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="mobile-toggle-btn" id="mobile-sidebar-toggle">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <h2 class="page-header-title">{% block page_title %}Dashboard{% endblock %}</h2>
+                </div>
+                <div class="topbar-right">
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            <i class="fa-solid fa-user-shield"></i>
+                        </div>
+                        <div class="user-info">
+                            <span class="user-name">{{ user.username|capfirst }}</span>
+                            <span class="user-role">Administrator</span>
+                        </div>
+                    </div>
+                    <form action="/admin-panel/logout/" method="post" class="logout-form">
+                        {% csrf_token %}
+                        <button type="submit" class="logout-btn" title="Log Out">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                </div>
+            </header>
+
+            <!-- Page Body Area -->
+            <main class="content-body">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Area -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Theme Controller JavaScript -->
+    <script src="{% static 'admin_panel/js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

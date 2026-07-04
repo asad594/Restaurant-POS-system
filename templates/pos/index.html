@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}POS Register - Restaurant POS{% endblock %}
+
+{% block content %}
+<div id="pos-register-page" class="pos-screen">
+    <!-- LEFT PANEL: Categories & Menu Grid -->
+    <section class="menu-panel">
+        <header class="menu-header" style="display: flex; flex-direction: column; gap: 15px; border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.08)); padding-bottom: 15px; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 15px;">
+                <h1 class="menu-title" style="margin: 0;">Main Menu</h1>
+                <div style="position: relative; width: 300px; max-width: 100%;">
+                    <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted, #a0a0b0); pointer-events: none;"></i>
+                    <input type="text" id="pos-search-input" placeholder="Search menu items..." style="width: 100%; padding: 10px 15px 10px 40px; border-radius: 20px; border: 1px solid var(--border-color, rgba(255,255,255,0.15)); background-color: rgba(255, 255, 255, 0.05); color: #ffffff; font-family: inherit; font-size: 0.95rem; outline: none; transition: all 0.2s ease;">
+                </div>
+            </div>
+            <!-- Categories Filter Container -->
+            <div class="categories-wrapper" id="categories-list" style="margin-top: 5px;">
+                <button class="category-btn active">
+                    <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+                </button>
+            </div>
+        </header>
+
+        <!-- Menu Item Cards Grid -->
+        <div class="menu-grid-container">
+            <div class="menu-grid" id="menu-grid">
+                <!-- Loaded via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- RIGHT PANEL: Current Cart Order -->
+    <section class="order-panel">
+        <header class="order-header">
+            <div class="table-selector-container">
+                <span class="table-label"><i class="fa-solid fa-chair"></i> Table:</span>
+                <select name="table" id="table-select" class="table-select">
+                    <option value="">Loading tables...</option>
+                </select>
+            </div>
+        </header>
+
+        <!-- Cart Items List Container -->
+        <div class="cart-items-container" id="cart-items-list">
+            <div class="cart-empty">
+                <i class="fa-solid fa-basket-shopping"></i>
+                <span>Your cart is empty</span>
+            </div>
+        </div>
+
+        <!-- Bill Footer Details -->
+        <div class="bill-summary">
+            <div class="summary-row">
+                <span>Subtotal:</span>
+                <span id="val-subtotal">Rs. 0.00</span>
+            </div>
+            <div class="summary-row">
+                <span>GST Tax (5%):</span>
+                <span id="val-tax">Rs. 0.00</span>
+            </div>
+            <div class="summary-row total">
+                <span>Grand Total:</span>
+                <span id="val-total">Rs. 0.00</span>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="cart-actions">
+            <button class="btn btn-danger" id="btn-clear-order">
+                <i class="fa-solid fa-trash-can"></i> Clear
+            </button>
+            <button class="btn btn-primary" id="btn-place-order">
+                <i class="fa-solid fa-circle-check"></i> Place & Pay
+            </button>
+        </div>
+    </section>
+</div>
+
+<!-- PAYMENT MODAL OVERLAY -->
+<div class="modal-overlay" id="payment-modal">
+    <div class="modal-card">
+        <div class="modal-title">
+            <i class="fa-solid fa-file-invoice-dollar"></i> Process Payment
+            <button id="modal-close" style="float: right; background: none; border: none; color: var(--text-color); cursor: pointer; font-size: 1.2rem;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <!-- Order Total Display -->
+        <div class="input-group">
+            <span class="input-label">Grand Total Amount Due:</span>
+            <div id="modal-total-amount" style="font-size: 2rem; font-weight: 800; color: var(--accent-color); text-align: center;">Rs. 0.00</div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="input-group">
+            <span class="input-label">Select Payment Method:</span>
+            <div class="payment-method-selector">
+                <button class="method-btn active" id="method-cash">
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                    <span>Cash</span>
+                </button>
+                <button class="method-btn" id="method-card">
+                    <i class="fa-solid fa-credit-card"></i>
+                    <span>Card</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Cash Details (Conditional) -->
+        <div class="input-group" id="cash-input-group">
+            <label for="cash-received" class="input-label">Cash Received:</label>
+            <input type="number" id="cash-received" class="input-control" step="0.01" min="0">
+            <div class="receipt-detail-row" style="margin-top: 0.5rem; font-size: 1rem; font-weight: 600;">
+                <span>Change to Return:</span>
+                <span id="change-amount" style="color: var(--accent-color);">Rs. 0.00</span>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button class="btn btn-primary" id="btn-submit-payment" style="width: 100%;">
+            <i class="fa-solid fa-cash-register"></i> Complete Transaction
+        </button>
+    </div>
+</div>
+{% endblock %}

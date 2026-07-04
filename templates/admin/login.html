@@ -1,0 +1,238 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* Premium Food Heaven POS Login Styles */
+    body {
+        background: radial-gradient(circle at center, #1b1b36 0%, #0f0f1a 100%) !important;
+        font-family: 'Inter', sans-serif !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+    }
+    
+    #container {
+        background: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
+        width: 100%;
+        max-width: 440px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+    
+    #header {
+        background: transparent !important;
+        color: #ffffff !important;
+        text-align: center;
+        padding: 0 0 1.5rem 0 !important;
+    }
+    
+    #branding h1 {
+        font-size: 2.2rem !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.5px;
+        color: #ffffff !important;
+        margin: 0;
+    }
+    
+    #branding h1 span {
+        color: #00b894 !important;
+    }
+    
+    .login {
+        background: rgba(26, 26, 46, 0.75) !important;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 18px !important;
+        padding: 2.5rem !important;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6) !important;
+        width: 100% !important;
+    }
+    
+    .login form {
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: transparent !important;
+    }
+    
+    .form-row {
+        padding: 0 0 1.25rem 0 !important;
+        border: none !important;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .form-row label {
+        color: #a0a0b0 !important;
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+        margin-bottom: 0.6rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.75px;
+        display: block;
+        float: none !important;
+        width: auto !important;
+    }
+    
+    .form-row input[type="text"],
+    .form-row input[type="password"] {
+        background: #121224 !important;
+        border: 1px solid #2a2a40 !important;
+        color: #ffffff !important;
+        padding: 0.95rem 1.2rem !important;
+        border-radius: 10px !important;
+        font-size: 1rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        transition: all 0.3s ease !important;
+        outline: none !important;
+        float: none !important;
+    }
+    
+    .form-row input[type="text"]:focus,
+    .form-row input[type="password"]:focus {
+        border-color: #00b894 !important;
+        box-shadow: 0 0 0 3px rgba(0, 184, 148, 0.15) !important;
+        background: #16162d !important;
+    }
+    
+    .submit-row {
+        padding: 0.5rem 0 0 0 !important;
+        background: transparent !important;
+        border: none !important;
+        display: flex;
+        flex-direction: column;
+        float: none !important;
+        margin: 0 !important;
+    }
+    
+    .submit-row input[type="submit"] {
+        background: #00b894 !important;
+        border: none !important;
+        color: #ffffff !important;
+        font-weight: 700 !important;
+        font-size: 1rem !important;
+        padding: 1rem !important;
+        border-radius: 10px !important;
+        width: 100% !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3) !important;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        float: none !important;
+        margin: 0 !important;
+    }
+    
+    .submit-row input[type="submit"]:hover {
+        background: #00a884 !important;
+        box-shadow: 0 6px 20px rgba(0, 184, 148, 0.4) !important;
+        transform: translateY(-2px);
+    }
+    
+    .submit-row input[type="submit"]:active {
+        transform: translateY(0);
+    }
+    
+    .back-btn-row {
+        text-align: center;
+        margin-top: 1.5rem;
+        border-top: 1px solid #2a2a40;
+        padding-top: 1.25rem;
+    }
+    
+    .back-btn {
+        color: #a0a0b0 !important;
+        text-decoration: none !important;
+        font-size: 0.9rem !important;
+        font-weight: 600 !important;
+        transition: color 0.3s ease !important;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .back-btn:hover {
+        color: #00b894 !important;
+    }
+    
+    .errornote {
+        background-color: rgba(225, 112, 85, 0.15) !important;
+        border: 1px solid #e17055 !important;
+        color: #e17055 !important;
+        border-radius: 10px !important;
+        padding: 0.8rem 1rem !important;
+        margin-bottom: 1.5rem !important;
+        font-size: 0.9rem !important;
+        text-align: center;
+    }
+    
+    /* Hide default header, footer and breadcrumbs */
+    #footer, .breadcrumbs, #header-content {
+        display: none !important;
+    }
+    
+    #content-main {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+</style>
+{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+{% block content %}
+<div class="login">
+    <div id="header">
+        <div id="branding">
+            <h1>Food Heaven <span>POS</span></h1>
+            <div style="font-size: 0.9rem; color: #a0a0b0; margin-top: 0.5rem; letter-spacing: 0.5px;">ADMINISTRATION ACCESS</div>
+        </div>
+    </div>
+
+    {% if form.errors and not form.non_field_errors %}
+    <p class="errornote">
+    {% if form.errors.items|length == 1 %}{% translate "Please correct the error below." %}{% else %}{% translate "Please correct the errors below." %}{% endif %}
+    </p>
+    {% endif %}
+
+    {% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+    <p class="errornote">
+        {{ error }}
+    </p>
+    {% endfor %}
+    {% endif %}
+
+    <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+      <div class="form-row">
+        {{ form.username.errors }}
+        <label for="id_username" class="required">{{ form.username.label }}:</label>
+        {{ form.username }}
+      </div>
+      <div class="form-row">
+        {{ form.password.errors }}
+        <label for="id_password" class="required">{% translate 'Password:' %}</label>
+        {{ form.password }}
+        <input type="hidden" name="next" value="{{ next }}">
+      </div>
+      
+      <div class="submit-row">
+        <input type="submit" value="{% translate 'Log in' %}">
+      </div>
+    </form>
+    
+    <div class="back-btn-row">
+        <a href="/" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i> Back to POS Register
+        </a>
+    </div>
+</div>
+{% endblock %}

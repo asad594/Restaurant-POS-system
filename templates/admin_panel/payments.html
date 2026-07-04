@@ -1,0 +1,65 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Manage Payments - Food Heaven{% endblock %}
+{% block page_title %}Payments{% endblock %}
+
+{% block content %}
+<div class="content-header-row">
+    <!-- Date Filters -->
+    <div class="filter-controls">
+        <div class="filter-group">
+            <label for="filter-start-date">Start Date</label>
+            <input type="date" id="filter-start-date" class="date-filter">
+        </div>
+        <div class="filter-group">
+            <label for="filter-end-date">End Date</label>
+            <input type="date" id="filter-end-date" class="date-filter">
+        </div>
+        <button class="btn btn-secondary" id="btn-clear-date-filter" style="margin-top: 1.5rem; height: 42px;">
+            <i class="fa-solid fa-filter-circle-xmark"></i>
+            <span>Clear</span>
+        </button>
+    </div>
+</div>
+
+<!-- Payments Ledger Card -->
+<div class="content-card">
+    <div class="table-responsive">
+        <table class="data-table" id="payments-table">
+            <thead>
+                <tr>
+                    <th>Payment ID</th>
+                    <th>Order ID</th>
+                    <th>Method</th>
+                    <th>Amount Tendered</th>
+                    <th>Change Given</th>
+                    <th>Actual Earned</th>
+                    <th>Cashier</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody id="payments-table-body">
+                <!-- Loaded dynamically via JS -->
+                <tr>
+                    <td colspan="8" class="table-loading">Loading payment logs...</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="table-total-row">
+                    <td colspan="6" class="text-right">Total Revenue Filtered:</td>
+                    <td colspan="2" class="total-revenue-value" id="payments-total-sum">Rs. 0.00</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        initPaymentsPage();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,287 @@
+[
+  {
+    "model": "menu.category",
+    "pk": 1,
+    "fields": {
+      "name": "Burgers",
+      "image": "categories/burgers.png",
+      "is_active": true
+    }
+  },
+  {
+    "model": "menu.category",
+    "pk": 2,
+    "fields": {
+      "name": "Pizzas",
+      "image": "categories/pizzas.png",
+      "is_active": true
+    }
+  },
+  {
+    "model": "menu.category",
+    "pk": 3,
+    "fields": {
+      "name": "Pasta",
+      "image": "categories/pasta.png",
+      "is_active": true
+    }
+  },
+  {
+    "model": "menu.category",
+    "pk": 4,
+    "fields": {
+      "name": "Drinks",
+      "image": "categories/drinks.png",
+      "is_active": true
+    }
+  },
+  {
+    "model": "menu.category",
+    "pk": 5,
+    "fields": {
+      "name": "Desserts",
+      "image": "categories/desserts.png",
+      "is_active": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 1,
+    "fields": {
+      "category": 1,
+      "name": "Classic Cheeseburger",
+      "price": "8.99",
+      "image": "menu_items/burger.png",
+      "description": "Juicy beef patty, melting cheddar cheese, lettuce, tomato, and chef's special sauce.",
+      "is_available": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 2,
+    "fields": {
+      "category": 1,
+      "name": "Bacon Double Burger",
+      "price": "11.99",
+      "image": "menu_items/burger.png",
+      "description": "Double beef patty, crispy bacon strips, double cheddar, and smokey BBQ sauce.",
+      "is_available": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 3,
+    "fields": {
+      "category": 1,
+      "name": "Mushroom Swiss Burger",
+      "price": "10.49",
+      "image": "menu_items/burger.png",
+      "description": "Sautéed mushrooms, Swiss cheese, and garlic aioli on a toasted brioche bun.",
+      "is_available": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 4,
+    "fields": {
+      "category": 1,
+      "name": "Spicy Chicken Burger",
+      "price": "9.49",
+      "image": "menu_items/burger.png",
+      "description": "Crispy fried chicken breast, spicy coleslaw, jalapeños, and chipotle mayo.",
+      "is_available": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 5,
+    "fields": {
+      "category": 2,
+      "name": "Pepperoni Pizza",
+      "price": "14.99",
+      "image": "menu_items/pizza.png",
+      "description": "Loaded with premium pepperoni, mozzarella cheese, and signature tomato sauce.",
+      "is_available": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 6,
+    "fields": {
+      "category": 2,
+      "name": "Margherita Pizza",
+      "price": "12.99",
+      "image": "menu_items/pizza.png",
+      "description": "Fresh mozzarella, cherry tomatoes, extra virgin olive oil, and fresh basil leaves.",
+      "is_available": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 7,
+    "fields": {
+      "category": 2,
+      "name": "BBQ Chicken Pizza",
+      "price": "15.99",
+      "image": "menu_items/pizza.png",
+      "description": "Grilled chicken breast, red onions, cilantro, and sweet smoky BBQ sauce drizzle.",
+      "is_available": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 8,
+    "fields": {
+      "category": 2,
+      "name": "Vegetarian Pizza",
+      "price": "13.99",
+      "image": "menu_items/pizza.png",
+      "description": "Bell peppers, mushrooms, red onions, black olives, sweet corn, and mozzarella.",
+      "is_available": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 9,
+    "fields": {
+      "category": 3,
+      "name": "Carbonara Pasta",
+      "price": "13.49",
+      "image": "menu_items/pasta.png",
+      "description": "Spaghetti in a rich creamy sauce with crispy bacon, egg yolk, and parmesan.",
+      "is_available": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 10,
+    "fields": {
+      "category": 3,
+      "name": "Bolognese Pasta",
+      "price": "14.49",
+      "image": "menu_items/pasta.png",
+      "description": "Slow-cooked beef ragout in rich tomato sauce, served over al dente fettuccine.",
+      "is_available": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 11,
+    "fields": {
+      "category": 3,
+      "name": "Alfredo Pasta",
+      "price": "12.99",
+      "image": "menu_items/pasta.png",
+      "description": "Penne pasta tossed in smooth, buttery parmesan garlic cream sauce.",
+      "is_available": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 12,
+    "fields": {
+      "category": 3,
+      "name": "Pesto Pasta",
+      "price": "11.99",
+      "image": "menu_items/pasta.png",
+      "description": "Fusilli pasta coated in aromatic fresh basil pesto, pine nuts, and parmesan.",
+      "is_available": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 13,
+    "fields": {
+      "category": 4,
+      "name": "Mint Mojito",
+      "price": "4.99",
+      "image": "menu_items/drink.png",
+      "description": "Fresh mint leaves, lime juice, brown sugar, and soda water served over crushed ice.",
+      "is_available": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 14,
+    "fields": {
+      "category": 4,
+      "name": "Strawberry Lemonade",
+      "price": "3.99",
+      "image": "menu_items/drink.png",
+      "description": "Refreshing home-squeezed lemonade blended with sweet fresh strawberries.",
+      "is_available": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 15,
+    "fields": {
+      "category": 4,
+      "name": "Iced Latte",
+      "price": "4.49",
+      "image": "menu_items/drink.png",
+      "description": "Chilled espresso poured over fresh milk and sweetened with vanilla syrup.",
+      "is_available": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 16,
+    "fields": {
+      "category": 4,
+      "name": "Coca Cola",
+      "price": "1.99",
+      "image": "menu_items/drink.png",
+      "description": "Original Coca Cola served ice cold in a glass with a slice of lemon.",
+      "is_available": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 17,
+    "fields": {
+      "category": 5,
+      "name": "Chocolate Fudge Cake",
+      "price": "6.99",
+      "image": "menu_items/dessert.png",
+      "description": "Decadent triple-layered chocolate cake smothered in rich chocolate fudge frosting.",
+      "is_available": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 18,
+    "fields": {
+      "category": 5,
+      "name": "New York Cheesecake",
+      "price": "7.49",
+      "image": "menu_items/dessert.png",
+      "description": "Classic rich and creamy cheesecake on a buttery graham cracker crust.",
+      "is_available": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 19,
+    "fields": {
+      "category": 5,
+      "name": "Tiramisu",
+      "price": "7.99",
+      "image": "menu_items/dessert.png",
+      "description": "Espresso-soaked ladyfingers layered with whipped mascarpone cheese and cocoa powder.",
+      "is_available": true
+    }
+  },
+  {
+    "model": "menu.menuitem",
+    "pk": 20,
+    "fields": {
+      "category": 5,
+      "name": "Chocolate Lava Cake",
+      "price": "6.49",
+      "image": "menu_items/dessert.png",
+      "description": "Warm chocolate cake with a molten liquid chocolate center, served with vanilla ice cream.",
+      "is_available": true
+    }
+  }
+]

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Restaurant POS{% endblock %}</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom POS CSS -->
+    <link rel="stylesheet" href="/static/css/pos.css">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="dark-theme">
+    <!-- App Container -->
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fa-solid fa-utensils logo-icon"></i>
+                <span class="logo-text">POS<span>System</span></span>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="/" class="nav-item {% if request.resolver_match.url_name == 'pos-index' %}active{% endif %}" title="POS Screen">
+                    <i class="fa-solid fa-cash-register"></i>
+                    <span>Register</span>
+                </a>
+                <a href="/kitchen/" class="nav-item {% if request.resolver_match.url_name == 'pos-kitchen' %}active{% endif %}" title="Kitchen View">
+                    <i class="fa-solid fa-kitchen-set"></i>
+                    <span>Kitchen</span>
+                </a>
+                <a href="/dashboard/" class="nav-item {% if request.resolver_match.url_name == 'dashboard-index' %}active{% endif %}" title="Analytics Dashboard">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="/admin-panel/" class="nav-item" title="Custom Admin Panel">
+                    <i class="fa-solid fa-user-gear"></i>
+                    <span>Admin</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer" style="display: flex; flex-direction: column; align-items: center; gap: 8px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 15px; padding-bottom: 15px;">
+                <div class="cashier-info" style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #a0a0b0;">
+                    <i class="fa-solid fa-user-tie" style="color: var(--accent-color, #ff7b00);"></i>
+                    <span>Cashier: <strong style="color: #ffffff;">{{ request.user.username|capfirst }}</strong></span>
+                </div>
+                <span class="system-time" id="system-time">00:00:00 PM</span>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Live clock update script -->
+    <script>
+        function updateTime() {
+            const timeEl = document.getElementById('system-time');
+            if (timeEl) {
+                const now = new Date();
+                timeEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            }
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
+    
+    <!-- Custom POS JS -->
+    <script src="/static/js/pos.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

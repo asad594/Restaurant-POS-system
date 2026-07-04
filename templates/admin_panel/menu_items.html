@@ -1,0 +1,162 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Manage Menu Items - Food Heaven{% endblock %}
+{% block page_title %}Menu Items{% endblock %}
+
+{% block content %}
+<div class="content-header-row">
+    <!-- Filter bar and Toggle controls -->
+    <div class="filter-controls" style="display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center; width: 100%;">
+        <div class="filter-group" style="min-width: 200px;">
+            <label for="filter-category">Category</label>
+            <select id="filter-category" class="select-filter">
+                <option value="all">All Categories</option>
+                <!-- Loaded dynamically via JS -->
+            </select>
+        </div>
+        <div class="filter-group" style="flex: 1; min-width: 250px;">
+            <label for="search-menu-items">Search Items</label>
+            <input type="text" id="search-menu-items" placeholder="Search by name or description..." style="background-color: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-color); padding: 0.55rem 1rem; border-radius: 6px; font-family: var(--font-family); font-size: 0.95rem; outline: none; width: 100%; height: 42px; margin-top: 0.25rem;">
+        </div>
+        <div class="view-toggle-group" style="margin-top: 1.5rem;">
+            <button class="view-toggle-btn active" id="view-grid-btn" title="Grid View">
+                <i class="fa-solid fa-grip"></i>
+            </button>
+            <button class="view-toggle-btn" id="view-table-btn" title="Table View">
+                <i class="fa-solid fa-list"></i>
+            </button>
+        </div>
+    </div>
+    
+    <button class="btn btn-primary" id="btn-add-item">
+        <i class="fa-solid fa-circle-plus"></i>
+        <span>Add New Item</span>
+    </button>
+</div>
+
+<!-- Grid View Container -->
+<div class="menu-items-grid" id="menu-items-grid-container">
+    <!-- Cards loaded dynamically via JS -->
+    <div class="table-loading" style="grid-column: 1/-1; text-align: center; padding: 3rem;">Loading menu items...</div>
+</div>
+
+<!-- Table View Container (hidden by default) -->
+<div class="content-card" id="menu-items-table-container" style="display: none;">
+    <div class="table-responsive">
+        <table class="data-table" id="menu-items-table">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Available</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="menu-items-table-body">
+                <!-- Loaded dynamically via JS -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Menu Item Add/Edit Modal -->
+<div class="modal-overlay" id="menu-item-modal">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3 class="modal-title" id="menu-item-modal-title">Add New Menu Item</h3>
+            <button class="modal-close-btn" id="menu-item-modal-close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <form id="menu-item-form" class="modal-form" enctype="multipart/form-data">
+            <input type="hidden" id="menu-item-id" name="id">
+            
+            <div class="form-group">
+                <label for="menu-item-category">Category <span class="required">*</span></label>
+                <select id="menu-item-category" name="category" required>
+                    <option value="">-- Select Category --</option>
+                    <!-- Loaded dynamically via JS -->
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="menu-item-name">Item Name <span class="required">*</span></label>
+                <input type="text" id="menu-item-name" name="name" placeholder="e.g. Classic Beef Burger" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="menu-item-size">Item Size</label>
+                <select id="menu-item-size" name="size" style="background-color: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-color); padding: 0.55rem 1rem; border-radius: 6px; font-family: var(--font-family); font-size: 0.95rem; outline: none; width: 100%; height: 42px; margin-top: 0.25rem;">
+                    <option value="">Standard (No Size)</option>
+                    <option value="Small">Small</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Large">Large</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="menu-item-price">Price (Rs.) <span class="required">*</span></label>
+                <input type="number" id="menu-item-price" name="price" step="0.01" min="0" placeholder="e.g. 700.00" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="menu-item-image">Image File</label>
+                <input type="file" id="menu-item-image" name="image" accept="image/*">
+                <!-- Live preview using FileReader JS API -->
+                <div class="image-preview-box" id="menu-item-image-preview-container" style="display: none; margin-top: 0.75rem;">
+                    <img id="menu-item-image-preview" src="" alt="Food Preview">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="menu-item-desc">Description</label>
+                <textarea id="menu-item-desc" name="description" placeholder="Enter item description..."></textarea>
+            </div>
+            
+            <div class="form-group-row">
+                <label for="menu-item-available" class="label-toggle-switch">Availability Status</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="menu-item-available" name="is_available" checked>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="menu-item-modal-cancel">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="menu-item-modal-submit">Save Item</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal-overlay" id="delete-modal">
+    <div class="modal-container modal-sm">
+        <div class="modal-header">
+            <h3 class="modal-title text-danger"><i class="fa-solid fa-circle-exclamation"></i> Confirm Delete</h3>
+            <button class="modal-close-btn" id="delete-modal-close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete this <span id="delete-item-type">item</span>? This action cannot be undone.</p>
+            <p class="delete-item-name" id="delete-item-name"></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="delete-modal-cancel">Cancel</button>
+            <button type="button" class="btn btn-danger" id="delete-modal-confirm">Delete</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        initMenuItemsPage();
+    });
+</script>
+{% endblock %}

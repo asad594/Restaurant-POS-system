@@ -1,0 +1,420 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block extrahead %}{{ block.super }}
+<script src="{% url 'admin:jsi18n' %}"></script>
+{{ media }}
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin/css/forms.css' %}">
+<style>
+    /* Premium dark-theme styling for Django Admin change/add forms */
+    body {
+        background-color: #0f0f1a !important;
+        color: #ffffff !important;
+        font-family: 'Inter', sans-serif !important;
+    }
+    
+    #container {
+        background-color: #0f0f1a !important;
+    }
+    
+    #content {
+        padding: 2rem !important;
+        background-color: #0f0f1a !important;
+    }
+    
+    /* Breadcrumbs styling */
+    .breadcrumbs {
+        background: #1a1a2e !important;
+        border: 1px solid #2a2a40 !important;
+        border-radius: 10px !important;
+        padding: 0.8rem 1.25rem !important;
+        margin-bottom: 2rem !important;
+        color: #a0a0b0 !important;
+        font-weight: 500 !important;
+    }
+    
+    .breadcrumbs a {
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        transition: color 0.2s ease;
+    }
+    
+    .breadcrumbs a:hover {
+        color: #00b894 !important;
+    }
+    
+    /* Form Title */
+    #content h1 {
+        font-size: 1.75rem !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.5px;
+        margin-bottom: 1.5rem !important;
+        color: #ffffff !important;
+    }
+    
+    /* Form Wrapper */
+    #content-main {
+        background: #1a1a2e !important;
+        border: 1px solid #2a2a40 !important;
+        border-radius: 16px !important;
+        padding: 2rem !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+    }
+    
+    /* Fieldsets and legends */
+    fieldset {
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    .module h2 {
+        font-size: 1.15rem !important;
+        font-weight: 700 !important;
+        color: #00b894 !important;
+        background: transparent !important;
+        border-bottom: 1px solid #2a2a40 !important;
+        padding: 0 0 0.75rem 0 !important;
+        margin-bottom: 1.5rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Form Rows spacing */
+    .form-row {
+        padding: 1.25rem 0 !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .form-row:last-child {
+        border-bottom: none !important;
+    }
+    
+    /* Label styling */
+    .form-row label {
+        color: #a0a0b0 !important;
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+        text-transform: uppercase;
+        letter-spacing: 0.75px;
+        float: none !important;
+        width: auto !important;
+        display: block;
+    }
+    
+    .form-row label.required::after {
+        content: " *";
+        color: #e17055;
+    }
+    
+    /* Inputs, Select and Textareas */
+    .form-row input[type="text"],
+    .form-row input[type="number"],
+    .form-row input[type="url"],
+    .form-row input[type="email"],
+    .form-row select,
+    .form-row textarea {
+        background: #121224 !important;
+        border: 1px solid #2a2a40 !important;
+        color: #ffffff !important;
+        padding: 0.9rem 1.1rem !important;
+        border-radius: 10px !important;
+        font-size: 1rem !important;
+        width: 100% !important;
+        max-width: 600px !important;
+        box-sizing: border-box !important;
+        transition: all 0.3s ease !important;
+        outline: none !important;
+        float: none !important;
+    }
+    
+    .form-row select {
+        cursor: pointer;
+        padding-right: 2rem !important;
+    }
+    
+    .form-row textarea {
+        min-height: 120px !important;
+        resize: vertical !important;
+    }
+    
+    .form-row input[type="text"]:focus,
+    .form-row input[type="number"]:focus,
+    .form-row select:focus,
+    .form-row textarea:focus {
+        border-color: #00b894 !important;
+        box-shadow: 0 0 0 3px rgba(0, 184, 148, 0.15) !important;
+        background: #16162d !important;
+    }
+    
+    /* Checkbox rows customization */
+    .form-row.vCheckboxField {
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .form-row.vCheckboxField label {
+        margin-bottom: 0 !important;
+        cursor: pointer;
+        font-size: 0.9rem !important;
+    }
+    
+    .form-row input[type="checkbox"] {
+        width: 18px !important;
+        height: 18px !important;
+        accent-color: #00b894 !important;
+        cursor: pointer !important;
+        margin: 0 !important;
+    }
+    
+    /* Help texts */
+    .help, .help-block {
+        font-size: 0.8rem !important;
+        color: #a0a0b0 !important;
+        margin-top: 0.25rem !important;
+        display: block;
+    }
+    
+    /* File input fields styling */
+    .form-row input[type="file"] {
+        color: #a0a0b0 !important;
+        font-size: 0.9rem !important;
+        cursor: pointer;
+        background: #121224;
+        border: 1px solid #2a2a40;
+        padding: 0.5rem;
+        border-radius: 8px;
+        max-width: 600px;
+    }
+    
+    .form-row input[type="file"]::-webkit-file-upload-button {
+        background: #00b894;
+        border: none;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-right: 1rem;
+        transition: background 0.2s ease;
+    }
+    
+    .form-row input[type="file"]::-webkit-file-upload-button:hover {
+        background: #00a884;
+    }
+    
+    /* Save and Delete Actions Bar (submit-row) */
+    .submit-row {
+        background: #121224 !important;
+        border: 1px solid #2a2a40 !important;
+        border-radius: 12px !important;
+        padding: 1.25rem !important;
+        margin-top: 2rem !important;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        float: none !important;
+    }
+    
+    .submit-row input, .submit-row a {
+        margin: 0 !important;
+        padding: 0.8rem 1.5rem !important;
+        font-size: 0.9rem !important;
+        font-weight: 700 !important;
+        border-radius: 8px !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        height: auto !important;
+        line-height: normal !important;
+    }
+    
+    /* Default Save Button (Save) */
+    .submit-row input[name="_save"] {
+        background: #00b894 !important;
+        color: #ffffff !important;
+        border: none !important;
+        box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3) !important;
+    }
+    
+    .submit-row input[name="_save"]:hover {
+        background: #00a884 !important;
+        box-shadow: 0 6px 20px rgba(0, 184, 148, 0.4) !important;
+        transform: translateY(-2px);
+    }
+    
+    /* Other Save Buttons */
+    .submit-row input[name="_addanother"],
+    .submit-row input[name="_continue"] {
+        background: #1a1a2e !important;
+        color: #ffffff !important;
+        border: 1px solid #2a2a40 !important;
+    }
+    
+    .submit-row input[name="_addanother"]:hover,
+    .submit-row input[name="_continue"]:hover {
+        border-color: #00b894 !important;
+        color: #00b894 !important;
+        background: rgba(0, 184, 148, 0.05) !important;
+    }
+    
+    /* Delete Button */
+    .submit-row a.deletelink {
+        background: #e17055 !important;
+        color: #ffffff !important;
+        border: none !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none !important;
+        box-shadow: 0 4px 15px rgba(225, 112, 85, 0.3) !important;
+    }
+    
+    .submit-row a.deletelink:hover {
+        background: #d15d43 !important;
+        box-shadow: 0 6px 20px rgba(225, 112, 85, 0.4) !important;
+        transform: translateY(-2px);
+    }
+    
+    /* Error notes styling */
+    .errornote {
+        background-color: rgba(225, 112, 85, 0.15) !important;
+        border: 1px solid #e17055 !important;
+        color: #e17055 !important;
+        border-radius: 10px !important;
+        padding: 0.8rem 1.25rem !important;
+        margin-bottom: 1.5rem !important;
+        font-size: 0.95rem !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Inline formsets (Order Items inside Order details) */
+    .inline-group {
+        border: 1px solid #2a2a40 !important;
+        border-radius: 12px !important;
+        background: #121224 !important;
+        margin-top: 2rem !important;
+        overflow: hidden;
+    }
+    
+    .inline-group h2 {
+        background: #1a1a2e !important;
+        border-bottom: 1px solid #2a2a40 !important;
+        padding: 0.9rem 1.25rem !important;
+        font-size: 1rem !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+        margin: 0 !important;
+    }
+    
+    .inline-related {
+        border: none !important;
+        background: transparent !important;
+        padding: 1.25rem !important;
+        border-bottom: 1px solid #2a2a40 !important;
+    }
+    
+    .inline-related:last-child {
+        border-bottom: none !important;
+    }
+    
+    .inline-related h3 {
+        background: transparent !important;
+        color: #00b894 !important;
+        font-size: 0.9rem !important;
+        font-weight: 700 !important;
+        border: none !important;
+        padding: 0 0 0.5rem 0 !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    .inline-related .form-row {
+        padding: 0.75rem 0 !important;
+    }
+</style>
+{% endblock %}
+
+{% block coltype %}colM{% endblock %}
+
+{% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-form{% endblock %}
+
+{% if not is_popup %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+&rsaquo; {% if has_view_permission %}<a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}{{ opts.verbose_name_plural|capfirst }}{% endif %}
+&rsaquo; {% if add %}{% blocktranslate with name=opts.verbose_name %}Add {{ name }}{% endblocktranslate %}{% else %}{{ original|truncatewords:"18" }}{% endif %}
+</div>
+{% endblock %}
+{% endif %}
+
+{% block content %}<div id="content-main">
+  {% block object-tools %}
+  {% if change %}{% if not is_popup %}
+    <ul class="object-tools">
+      {% block object-tools-items %}
+        {% change_form_object_tools %}
+      {% endblock %}
+    </ul>
+  {% endif %}{% endif %}
+  {% endblock %}
+  <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}{% if form_url %}action="{{ form_url }}" {% endif %}method="post" id="{{ opts.model_name }}_form" novalidate>{% csrf_token %}{% block form_top %}{% endblock %}
+    <div>
+      {% if is_popup %}<input type="hidden" name="_popup" value="1">{% endif %}
+      {% if to_field %}<input type="hidden" name="_to_field" value="{{ to_field }}">{% endif %}
+      {% if save_on_top %}{% block submit_buttons_top %}{% submit_row %}{% endblock %}{% endif %}
+      {% if errors %}
+        <p class="errornote">
+        {% if errors|length == 1 %}{% translate "Please correct the error below." %}{% else %}{% translate "Please correct the errors below." %}{% endif %}
+        </p>
+        {{ adminform.form.non_field_errors }}
+      {% endif %}
+
+      {% block field_sets %}
+      {% for fieldset in adminform %}
+        {% include "admin/includes/fieldset.html" %}
+      {% endfor %}
+      {% endblock %}
+
+      {% block after_field_sets %}{% endblock %}
+
+      {% block inline_field_sets %}
+      {% for inline_admin_formset in inline_admin_formsets %}
+        {% include "admin/includes/inline_fieldset.html" %}
+      {% endfor %}
+      {% endblock %}
+
+      {% block after_related_objects %}{% endblock %}
+
+      {% block submit_buttons_bottom %}{% submit_row %}{% endblock %}
+
+      {% block admin_change_form_document_ready %}
+        <script id="django-admin-form-add-constants"
+                src="{% static 'admin/js/change_form.js' %}"
+                {% if opts.actions %}
+                    data-model-name="{{ opts.model_name }}"
+                {% endif %}
+                async>
+        </script>
+      {% endblock %}
+
+      {# JavaScript for prepopulated fields #}
+      {% prepopulated_fields_js %}
+
+    </div>
+  </form>
+</div>
+{% endblock %}

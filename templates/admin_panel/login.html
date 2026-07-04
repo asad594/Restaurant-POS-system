@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Heaven Admin Login</title>
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="{% static 'admin_panel/css/style.css' %}">
+</head>
+<body class="dark-theme login-body">
+    <!-- Login Wrapper -->
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">
+                    <i class="fa-solid fa-utensils"></i>
+                    <span>Food Heaven <span>POS</span></span>
+                </div>
+                <h2 class="login-title">Administrator Sign In</h2>
+                <p class="login-subtitle">Please enter your credentials to access the admin panel</p>
+            </div>
+            
+            {% if form.errors %}
+                <div class="login-error">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span>Invalid username or password. Please try again.</span>
+                </div>
+            {% endif %}
+
+            <form method="post" class="login-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_username">Username</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" name="username" id="id_username" placeholder="Username" required autofocus>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="id_password">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" name="password" id="id_password" placeholder="Password" required>
+                    </div>
+                </div>
+                <button type="submit" class="login-btn">
+                    <span>Log In</span>
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                </button>
+            </form>
+            <div class="login-footer">
+                <a href="/" class="back-link">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Back to Customer Register</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

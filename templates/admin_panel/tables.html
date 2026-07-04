@@ -1,0 +1,65 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Manage Tables - Food Heaven{% endblock %}
+{% block page_title %}Tables{% endblock %}
+
+{% block content %}
+<div class="content-header-row">
+    <h3 class="section-subtitle">Visual floor grid layout of dine-in tables</h3>
+    <button class="btn btn-primary" id="btn-add-table">
+        <i class="fa-solid fa-circle-plus"></i>
+        <span>Add New Table</span>
+    </button>
+</div>
+
+<!-- Tables Layout Grid -->
+<div class="tables-grid" id="tables-grid-container">
+    <!-- Loaded dynamically via JS -->
+    <div class="table-loading" style="text-align: center; grid-column: 1/-1; padding: 4rem;">Loading restaurant tables...</div>
+</div>
+
+<!-- Add Table Modal -->
+<div class="modal-overlay" id="table-modal">
+    <div class="modal-container modal-sm">
+        <div class="modal-header">
+            <h3 class="modal-title">Add New Restaurant Table</h3>
+            <button class="modal-close-btn" id="table-modal-close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <form id="table-form" class="modal-form">
+            <div class="form-group">
+                <label for="table-number">Table Number <span class="required">*</span></label>
+                <input type="number" id="table-number" name="number" min="1" placeholder="e.g. 11" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="table-capacity">Seating Capacity</label>
+                <input type="number" id="table-capacity" name="capacity" min="1" max="20" value="4">
+            </div>
+            
+            <div class="form-group-row">
+                <label for="table-status" class="label-toggle-switch">Dine-in Status (Free/Occupied)</label>
+                <label class="toggle-switch text-success">
+                    <input type="checkbox" id="table-status" name="status-toggle" checked> <!-- Checked = Free, Unchecked = Occupied -->
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="table-modal-cancel">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Table</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        initTablesPage();
+    });
+</script>
+{% endblock %}

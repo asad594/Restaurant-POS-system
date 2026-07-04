@@ -1,0 +1,445 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* Dark Premium Theme Overrides for Django Admin Dashboard */
+    body {
+        background-color: #0f0f1a !important;
+        color: #ffffff !important;
+        font-family: 'Inter', sans-serif !important;
+    }
+    
+    #container {
+        background-color: #0f0f1a !important;
+    }
+    
+    #content {
+        padding: 2rem !important;
+        background-color: #0f0f1a !important;
+    }
+    
+    /* Header Rebranding */
+    #header {
+        background-color: #1a1a2e !important;
+        border-bottom: 1px solid #2a2a40 !important;
+        padding: 1rem 2rem !important;
+    }
+    
+    #branding h1 {
+        font-weight: 800 !important;
+        color: #ffffff !important;
+    }
+    
+    #branding h1 span {
+        color: #00b894 !important;
+    }
+    
+    #user-tools {
+        color: #a0a0b0 !important;
+        font-weight: 500 !important;
+    }
+    
+    #user-tools a {
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        transition: color 0.2s ease;
+    }
+    
+    #user-tools a:hover {
+        color: #00b894 !important;
+    }
+    
+    /* Welcome Message */
+    .dashboard-title-row {
+        margin-bottom: 2rem;
+    }
+    
+    .dashboard-welcome {
+        font-size: 1.75rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        margin-bottom: 0.5rem;
+    }
+    
+    .dashboard-subtitle {
+        color: #a0a0b0;
+        font-size: 0.95rem;
+    }
+    
+    /* Quick Action Cards Grid */
+    .quick-actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1.25rem;
+        margin-bottom: 2.5rem;
+    }
+    
+    .action-card {
+        background: rgba(26, 26, 46, 0.75);
+        border: 1px solid #2a2a40;
+        border-radius: 14px;
+        padding: 1.5rem;
+        text-align: center;
+        text-decoration: none;
+        color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .action-card:hover {
+        border-color: #00b894;
+        background: #1a1a2e;
+        transform: translateY(-4px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    
+    .action-icon-wrapper {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        background-color: rgba(0, 184, 148, 0.12);
+        color: #00b894;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .action-card:hover .action-icon-wrapper {
+        background-color: #00b894;
+        color: #ffffff;
+        box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+    }
+    
+    .action-label {
+        font-weight: 700;
+        font-size: 0.95rem;
+        letter-spacing: -0.2px;
+    }
+    
+    .action-desc {
+        font-size: 0.8rem;
+        color: #a0a0b0;
+    }
+    
+    /* Dashboard Main Two-column Grid */
+    .dashboard-columns {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1.5rem;
+        align-items: start;
+    }
+    
+    @media (max-width: 1024px) {
+        .dashboard-columns {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    /* Custom Admin Cards */
+    .app-card {
+        background: #1a1a2e;
+        border: 1px solid #2a2a40;
+        border-radius: 14px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .app-card-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #ffffff;
+        border-bottom: 1px solid #2a2a40;
+        padding-bottom: 0.75rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+    
+    .app-card-title i {
+        color: #00b894;
+    }
+    
+    .app-model-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+    
+    .app-model-row:last-child {
+        border-bottom: none;
+    }
+    
+    .model-name {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #ffffff;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+    
+    .model-name:hover {
+        color: #00b894;
+    }
+    
+    .model-actions {
+        display: flex;
+        gap: 0.75rem;
+    }
+    
+    .model-action-btn {
+        background-color: #121224;
+        border: 1px solid #2a2a40;
+        color: #a0a0b0;
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        transition: all 0.2s ease;
+    }
+    
+    .model-action-btn:hover {
+        border-color: #00b894;
+        color: #00b894;
+        background-color: rgba(0, 184, 148, 0.05);
+    }
+    
+    .model-action-btn.add-btn:hover {
+        border-color: #3498db;
+        color: #3498db;
+        background-color: rgba(52, 152, 219, 0.05);
+    }
+    
+    /* Recent Actions Panel */
+    .recent-actions-card {
+        background: #1a1a2e;
+        border: 1px solid #2a2a40;
+        border-radius: 14px;
+        padding: 1.5rem;
+    }
+    
+    .recent-actions-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .recent-actions-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .action-item {
+        font-size: 0.85rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+    
+    .action-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+    
+    .action-item a {
+        color: #00b894;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    
+    .action-item a:hover {
+        text-decoration: underline;
+    }
+    
+    .action-type {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        display: inline-block;
+        margin-bottom: 0.2rem;
+    }
+    
+    .action-add { color: #00b894; }
+    .action-change { color: #f1c40f; }
+    .action-delete { color: #e17055; }
+    
+    .action-meta {
+        color: #a0a0b0;
+        font-size: 0.8rem;
+        margin-top: 0.2rem;
+    }
+    
+    /* Hide Default Columns */
+    #content-main, .module {
+        display: none !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Welcome Header -->
+    <div class="dashboard-title-row">
+        <h1 class="dashboard-welcome">Welcome, {{ user.get_username|capfirst }} 👋</h1>
+        <div class="dashboard-subtitle">Food Heaven POS management portal. Quickly manage items, configure tables, and track analytics.</div>
+    </div>
+
+    <!-- Quick Actions Buttons -->
+    <div class="quick-actions-grid">
+        <a href="/" class="action-card">
+            <div class="action-icon-wrapper">
+                <i class="fa-solid fa-cash-register"></i>
+            </div>
+            <span class="action-label">POS Register</span>
+            <span class="action-desc">Open Sales Terminal</span>
+        </a>
+        <a href="/kitchen/" class="action-card">
+            <div class="action-icon-wrapper" style="background-color: rgba(241, 196, 15, 0.12); color: #f1c40f;">
+                <i class="fa-solid fa-kitchen-set"></i>
+            </div>
+            <span class="action-label" style="color: #ffffff;">Kitchen Panel</span>
+            <span class="action-desc">Track Active Orders</span>
+        </a>
+        <a href="/dashboard/" class="action-card">
+            <div class="action-icon-wrapper" style="background-color: rgba(52, 152, 219, 0.12); color: #3498db;">
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+            <span class="action-label" style="color: #ffffff;">Sales Reports</span>
+            <span class="action-desc">View Sales Charts</span>
+        </a>
+        <a href="/admin/menu/menuitem/add/" class="action-card">
+            <div class="action-icon-wrapper">
+                <i class="fa-solid fa-plus"></i>
+            </div>
+            <span class="action-label">Add Menu Item</span>
+            <span class="action-desc">Insert New Dishes</span>
+        </a>
+    </div>
+
+    <!-- Two columns split -->
+    <div class="dashboard-columns">
+        <!-- Apps Cards Column -->
+        <div class="apps-column">
+            <!-- App Card: Menu -->
+            <div class="app-card">
+                <h2 class="app-card-title"><i class="fa-solid fa-bowl-food"></i> Menu Management</h2>
+                <div class="app-model-row">
+                    <a href="/admin/menu/category/" class="model-name">Categories</a>
+                    <div class="model-actions">
+                        <a href="/admin/menu/category/add/" class="model-action-btn add-btn"><i class="fa-solid fa-plus"></i> Add</a>
+                        <a href="/admin/menu/category/" class="model-action-btn"><i class="fa-solid fa-pen"></i> Manage</a>
+                    </div>
+                </div>
+                <div class="app-model-row">
+                    <a href="/admin/menu/menuitem/" class="model-name">Menu items</a>
+                    <div class="model-actions">
+                        <a href="/admin/menu/menuitem/add/" class="model-action-btn add-btn"><i class="fa-solid fa-plus"></i> Add</a>
+                        <a href="/admin/menu/menuitem/" class="model-action-btn"><i class="fa-solid fa-pen"></i> Manage</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- App Card: Orders -->
+            <div class="app-card">
+                <h2 class="app-card-title"><i class="fa-solid fa-receipt"></i> Orders & Tables</h2>
+                <div class="app-model-row">
+                    <a href="/admin/orders/table/" class="model-name">Tables Configuration</a>
+                    <div class="model-actions">
+                        <a href="/admin/orders/table/add/" class="model-action-btn add-btn"><i class="fa-solid fa-plus"></i> Add</a>
+                        <a href="/admin/orders/table/" class="model-action-btn"><i class="fa-solid fa-pen"></i> Manage</a>
+                    </div>
+                </div>
+                <div class="app-model-row">
+                    <a href="/admin/orders/order/" class="model-name">Orders Transactions</a>
+                    <div class="model-actions">
+                        <a href="/admin/orders/order/" class="model-action-btn"><i class="fa-solid fa-pen"></i> View All</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- App Card: Payments -->
+            <div class="app-card">
+                <h2 class="app-card-title"><i class="fa-solid fa-credit-card"></i> Billings & Payments</h2>
+                <div class="app-model-row">
+                    <a href="/admin/payments/payment/" class="model-name">Payments Logs</a>
+                    <div class="model-actions">
+                        <a href="/admin/payments/payment/" class="model-action-btn"><i class="fa-solid fa-receipt"></i> Logs</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- App Card: Authentication -->
+            <div class="app-card">
+                <h2 class="app-card-title"><i class="fa-solid fa-users-gear"></i> System Accounts</h2>
+                <div class="app-model-row">
+                    <a href="/admin/auth/user/" class="model-name">Users (Staff Accounts)</a>
+                    <div class="model-actions">
+                        <a href="/admin/auth/user/add/" class="model-action-btn add-btn"><i class="fa-solid fa-user-plus"></i> Invite</a>
+                        <a href="/admin/auth/user/" class="model-action-btn"><i class="fa-solid fa-pen"></i> Manage</a>
+                    </div>
+                </div>
+                <div class="app-model-row">
+                    <a href="/admin/auth/group/" class="model-name">Groups (Permissions Profiles)</a>
+                    <div class="model-actions">
+                        <a href="/admin/auth/group/add/" class="model-action-btn add-btn"><i class="fa-solid fa-plus"></i> Add</a>
+                        <a href="/admin/auth/group/" class="model-action-btn"><i class="fa-solid fa-pen"></i> Manage</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Recent Actions Column -->
+        <div class="recent-actions-column">
+            <div class="recent-actions-card">
+                <h2 class="recent-actions-title"><i class="fa-solid fa-history"></i> Recent Activity</h2>
+                <div class="recent-actions-list">
+                    {% load log %}
+                    {% get_admin_log 10 as admin_log for_user user %}
+                    {% if not admin_log %}
+                        <p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 1rem 0;">No recent actions recorded.</p>
+                    {% else %}
+                        {% for entry in admin_log %}
+                            <div class="action-item">
+                                {% if entry.is_addition %}
+                                    <span class="action-type action-add"><i class="fa-solid fa-circle-plus"></i> Added</span>
+                                {% elif entry.is_change %}
+                                    <span class="action-type action-change"><i class="fa-solid fa-circle-notch"></i> Changed</span>
+                                {% elif entry.is_deletion %}
+                                    <span class="action-type action-delete"><i class="fa-solid fa-circle-minus"></i> Deleted</span>
+                                {% endif %}
+                                <div class="action-content">
+                                    {% if entry.is_deletion or not entry.get_admin_url %}
+                                        {{ entry.object_repr }}
+                                    {% else %}
+                                        <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                                    {% endif %}
+                                    <div class="action-meta">
+                                        {{ entry.content_type.name|capfirst }} • {{ entry.action_time|date:"h:i A, d M" }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
