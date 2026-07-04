@@ -8,6 +8,10 @@
 
 A modern, **dark-themed, tablet-friendly Point of Sale (POS) system** designed specifically for restaurants. It operates as a native **desktop application** using Python's `pywebview` module wrapping a robust Django REST Framework backend with a PostgreSQL database.
 
+<p align="center">
+  <img src="static/images/restaurant_pos_ui.png" alt="FoodHeaven Restaurant POS System UI Mockup" width="850">
+</p>
+
 ---
 
 ## ✨ Features
